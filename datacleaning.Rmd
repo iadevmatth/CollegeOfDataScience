@@ -1,0 +1,72 @@
+```{r}
+# Dataset testes para estudo da linguagem R d curso Ciêntista de Dados.
+dados = read.csv("tempo.csv", sep = ";", na.strings = "", stringsAsFactors = T)
+head(dados)
+summary(dados)
+```
+
+```{r}
+# Resumo dos dados para análise das tratativas a serem feitas.
+counts = table(dados$Aparencia)
+barplot(counts)
+counts = table(dados$Temperatura)
+barplot(counts)
+counts = table(dados$Umidade)
+barplot(counts)
+dados[!complete.cases(dados),]
+```
+
+```{r}
+# Identificando valores fora de contexto e atribuindo a moda.
+unique(dados$Aparencia)
+summary(dados$Aparencia)
+dados[dados$Aparencia == "menos",]$Aparencia = "chuva"
+summary(dados$Aparencia)
+
+# Foi feito a remoção de fatores inutilizados.
+dados$Aparencia = factor(dados$Aparencia)
+summary(dados$Aparencia)
+counts = table(dados$Aparencia)
+barplot(counts)
+```
+
+```{r}
+# Valores desproporcionais e nulos identificados
+unique(dados$Umidade)
+summary(dados$Umidade)
+dados[!complete.cases(dados$Umidade),]
+median(dados$Umidade, na.rm = T)
+
+# Foram substituidos os valores desproporcionais pela mediana localizada.
+dados[is.na(dados$Umidade),]$Umidade = median(dados$Umidade, na.rm = T)
+dados[!complete.cases(dados$Umidade),]
+dados[dados$Umidade < 0 | dados$Umidade > 100 ,]$Umidade
+median(dados$Umidade)
+dados[dados$Umidade < 0 | dados$Umidade > 100 ,]$Umidade = median(dados$Umidade)
+summary(dados$Umidade)
+```
+
+```{r}
+# Correção dos valores nulos atribuindo os mesmo a moda.
+unique(dados$Vento)
+summary(dados$Vento)
+dados[!complete.cases(dados$Vento),]
+dados[is.na(dados$Vento),]$Vento = "FALSO"
+dados[!complete.cases(dados$Vento),]
+```
+
+```{r}
+# Enquadrando os valores desproporcionais dentro da mediana.
+unique(dados$Temperatura)
+dados[dados$Temperatura < -130 | dados$Temperatura > 130 ,]$Temperatura
+median(dados$Temperatura)
+dados[dados$Temperatura < -130 | dados$Temperatura > 130 ,]$Temperatura = median(dados$Temperatura)
+dados[dados$Temperatura < -130 | dados$Temperatura > 130 ,]$Temperatura
+summary(dados$Temperatura)
+```
+
+```{r}
+summary(dados)
+```
+
+
